@@ -3,3 +3,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub your_username@your_host
 
 sudo nano inventory.ini
 ansible_ssh_private_key_file="~/.ssh/ansible.pem" ansible_user=user
+[servers]
+myhost.example.com ansible_ssh_private_key_file=/path/to/ssh/key.pub
+
+ansible_ssh_private_key_file=/home/alex/Ansible-alex-rsa.pub
