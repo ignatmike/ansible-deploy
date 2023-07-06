@@ -1,0 +1,38 @@
+### install
+
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible
+
+python3 --version
+
+### inventory
+
+sudo nano /etc/ansible/hosts
+
+    [servers]
+    server1 ansible_host=IP1
+    server2 ansible_host=IP2
+    server3 ansible_host=IP3
+    
+    [all:vars]
+    ansible_python_interpreter=/usr/bin/python3
+
+ansible-inventory --list -y
+
+Output
+all:
+  children:
+    servers:
+      hosts:
+        server1:
+          ansible_host: IP1
+          ansible_python_interpreter: /usr/bin/python3
+        server2:
+          ansible_host: Ip2
+          ansible_python_interpreter: /usr/bin/python3
+        server3:
+          ansible_host: IP3
+          ansible_python_interpreter: /usr/bin/python3
+    ungrouped: {}
+
