@@ -1,1 +1,14 @@
 https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#control-node-requirements
+
+
+
+
+
+
+sudo install python3-pip
+
+#if executables are placed in the wrong path make an update to bashrc 
+sudo nano ~/.bashrc
+
+### Path
+export PATH="$PATH:/home/slipstream/.local/bin"
