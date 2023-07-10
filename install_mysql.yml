@@ -1,0 +1,36 @@
+---
+# ansible-playbook -i your_inventory_file install_mysql.yml
+- name: Install MySQL on Ubuntu
+  hosts: your_server
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: Install MySQL packages
+      apt:
+        name:
+          - mysql-server
+          - python3-pymysql
+        state: present
+      become: yes
+
+    - name: Configure MySQL root password
+      debconf:
+        name: 'mysql-server'
+        question: 'mysql-server/root_password'
+        value: 'your_root_password'
+        vtype: password
+      become: yes
+
+    - name: Reconfigure MySQL package with new password
+      shell: 'echo "mysql-server-5.7 mysql-server/root_password_again password your_root_password" | debconf-set-selections'
+      become: yes
+
+    - name: Restart MySQL service
+      service:
+        name: mysql
+        state: restarted
+      become: yes
