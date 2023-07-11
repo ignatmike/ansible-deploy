@@ -1,13 +1,19 @@
+# sudo nano sql-deploy.yml
+
+# ansible-playbook sql-deploy.yml
+
+#####
+
 ---
-# ansible-playbook -i your_inventory_file install_mysql.yml
 - name: Install MySQL on Ubuntu
-  hosts: your_server
-  become: yes
+  hosts: sql
+  become: true
+  vars:
+    ansible_become_pass: 'alex'
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
-      become: yes
 
     - name: Install MySQL packages
       apt:
@@ -15,22 +21,19 @@
           - mysql-server
           - python3-pymysql
         state: present
-      become: yes
 
     - name: Configure MySQL root password
       debconf:
         name: 'mysql-server'
         question: 'mysql-server/root_password'
-        value: 'your_root_password'
+        value: 'alex'
         vtype: password
-      become: yes
 
     - name: Reconfigure MySQL package with new password
-      shell: 'echo "mysql-server-5.7 mysql-server/root_password_again password your_root_password" | debconf-set-selections'
-      become: yes
+      shell: 'echo "mysql-server-5.7 mysql-server/alex password alex" | debconf-set-selections'
 
     - name: Restart MySQL service
       service:
         name: mysql
         state: restarted
-      become: yes
+        enabled: true
