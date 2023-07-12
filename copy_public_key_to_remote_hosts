@@ -1,0 +1,49 @@
+name: Copy public key to authorized_keys
+  hosts: all
+  become: true
+  vars:
+    ansible_user: alex
+    ansible_password: alex
+    ansible_become_password: alex
+  tasks:
+    - name: Copy public key file to target host
+      copy:
+        src: /home/alex/ansiblekey.pub  # Update the source path of the public key file on the Ansible control host
+        dest: /home/alex/ansiblekey.pub  # Destination path on the target host
+        owner: alex  # Set the owner to "alex"
+        mode: '0644'
+    
+    - name: Read public key file
+      slurp:
+        path: /home/alex/ansiblekey.pub
+      register: public_key
+
+    - name: Create /home/alex/.ssh directory
+      file:
+        path: /home/alex/.ssh
+        state: directory
+        mode: '0700'
+        owner: alex  # Set the owner to "alex"
+
+    - name: Append public key to authorized_keys
+      lineinfile:
+        path: /home/alex/.ssh/authorized_keys
+        line: "{{ public_key.content | b64decode }}"
+        create: yes
+        insertafter: EOF
+        mode: '0600'
+        owner: alex  # Set the owner to "alex"
+        group: alex
+
+    - name: Display authorized_keys content
+      shell: cat /home/alex/.ssh/authorized_keys
+      register: authorized_keys_output
+
+    - name: Print authorized_keys content
+      debug:
+        var: authorized_keys_output.stdout_lines
+        
+    - name: Remove public key file from target host
+      file:
+        path: /home/alex/ansiblekey.pub
+        state: absent
