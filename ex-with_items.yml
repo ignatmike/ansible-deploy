@@ -1,0 +1,14 @@
+- name: install apps using with_items
+  hosts: web-test
+  become: yes
+
+  tasks:
+    - name: install apps
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+        - python-virtualenv
