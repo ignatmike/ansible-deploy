@@ -1,4 +1,4 @@
-name: Copy public key to authorized_keys
+- name: Copy public key to authorized_keys
   hosts: all
   become: true
   vars:
