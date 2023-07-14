@@ -1,0 +1,20 @@
+- name: Install NGINX on Ubuntu
+  hosts: your_server
+  become: true
+  vars:
+    ansible_become_pass: 'alex'
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install NGINX package
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start NGINX service
+      service:
+        name: nginx
+        state: started
+        enabled: true
